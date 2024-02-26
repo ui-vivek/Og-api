@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongoClient, Db } from 'mongodb';
 import { DbController } from './db.controller';
-import { UsersService } from './db.service';
-
+import { DbService } from './db.service';
+@Global()
 @Module({
   imports: [],
   controllers: [DbController],
   providers: [
-    UsersService,
+    DbService,
     {
       provide: 'DATABASE_CONNECTION',
       useFactory: async (): Promise<Db> => {
@@ -20,6 +20,6 @@ import { UsersService } from './db.service';
       },
     },
   ],
-  exports: ['DATABASE_CONNECTION'],
+  exports: ['DATABASE_CONNECTION',DbService],
 })
 export class DatabaseModule {}

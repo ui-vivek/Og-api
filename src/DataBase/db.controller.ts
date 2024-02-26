@@ -1,11 +1,11 @@
 
 import { Controller, Post, Body, Get, Param, Header, Headers } from '@nestjs/common';
-import { UsersService } from './db.service';
+import { DbService } from './db.service';
 
 
 @Controller('user') 
 export class DbController {
-    constructor(private readonly dbService: UsersService) {}
+    constructor(private readonly dbService: DbService) {}
     @Post('create')
     async createData(@Body() createDataDto: any) {
       return this.dbService.create(createDataDto);

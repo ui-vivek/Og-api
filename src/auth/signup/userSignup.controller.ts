@@ -1,14 +1,28 @@
-import { Body, Controller, Post } from "@nestjs/common";
-import { UserSignUpService } from "./userSignup.service";
-import { UserSignUpDTO } from "../dto/user-sign-up.dto";
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { UserSignUpService } from './userSignup.service';
+import { UserSignUpDTO } from '../dto/user-sign-up.dto';
+import { Response } from 'express';
 
-@Controller('signup')
-export class UsersSignUpController{
-    constructor(private _userSignUpService:UserSignUpService){}
+@Controller()
+export class UsersSignUpController {
+  constructor(private _userSignUpService: UserSignUpService) {}
 
-    @Post()
-    createUser(@Body() user:UserSignUpDTO){
-       let signup= this._userSignUpService.userSignUp(user)
-       return signup;
+  @Post('signup')
+  @UsePipes(new ValidationPipe())
+  async signup(@Body() user: UserSignUpDTO, @Res() res: Response) {
+    let response = await this._userSignUpService.signup(user);
+    if (response.data.accessToken) {
+      res.header('Access-Token', response.data.accessToken);
+      return res.send(response);
+    } else {
+      return res.send(response);
     }
+  }
 }
