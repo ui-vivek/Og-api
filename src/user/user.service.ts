@@ -6,13 +6,17 @@ export class UserService {
   constructor(private _dbService: DbService) {}
   async findUserByEmail(email) {
     try {
-      return await this._dbService.findOneByEmail(email);
+      return await this._dbService.findUserByEmail(email);
     } catch (error) {
       console.error('Error fetching user:', error);
     }
   }
-  findUserById(id) {
-    // return this.users.find(user=>user.id===id)
+  async findUserById(id:string) {
+    try {
+      return await this._dbService.findUserById(id);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
   }
   findByUsername(username) {
     // return this.users.find(user=>user.username===username)

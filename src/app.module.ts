@@ -7,14 +7,15 @@ import { CartController } from './cart/cart.controller';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { CartService } from './cart/cart.service';
 import { UserModule } from './user/user.module';
-import { OrdersController } from './orders/orders.controller';
+// import { OrdersController } from './orders/orders.controller';
 import { OrdersService } from './orders/orders.service';
 import { UserService } from './user/user.service';
 import { JwtAuthGuard } from './auth/auth.guard';
+import { OrdersModule } from './orders/oder.module';
 
 @Module({
-  imports: [AuthModule,DatabaseModule,UserModule],
-  controllers: [AppController,CartController,OrdersController],
+  imports: [AuthModule,DatabaseModule,UserModule,OrdersModule],
+  controllers: [AppController,CartController],
   providers: [AppService,CartService,AuthMiddleware,OrdersService,UserService], 
 })
 export class AppModule {

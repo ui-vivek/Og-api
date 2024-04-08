@@ -32,13 +32,15 @@ export class UserSignUpService {
       saltRounds,
     );
     delete userSignUpData.conformpassword;
+    
+    const user = await this._dbService.addUser(userSignUpData);
+    const { insertedId } = user;
+    const idString = insertedId.toString();
     const payload = {
-      username: userSignUpData.email,
+      userID: idString,
       sub: userSignUpData.fullname,
     };
-    // const accessToken = this.jwtService.sign(payload);
     const accessToken =  this.jwtService.sign(payload);
-    const user = await this._dbService.addUser(userSignUpData);
     if (!user.acknowledged)
       return { status: 404, data: {}, message: 'Something went wrong' };
     return  { status: 201, data: {accessToken}, message: 'User Created Successfully' };

@@ -16,7 +16,7 @@ const JWT_SECRET =  process.env.JWT_SECRET
   imports: [UserModule,DatabaseModule,UserModule,JwtModule.register({
     global: true,
     secret: JWT_SECRET,
-    signOptions: { expiresIn: '5m' },
+    signOptions: { expiresIn: '60m' },
   }),],
   controllers: [UserSignInController,UsersSignUpController,UpdateUserController],
   providers: [UserSignInService,UserSignUpService,UserUpdateService,],

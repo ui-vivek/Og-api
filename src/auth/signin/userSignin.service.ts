@@ -27,9 +27,10 @@ export class UserSignInService {
         if (!isPasswordValid) {
           return { status: 401, data: {}, message: 'Incorrect password' };
         }
-
+        const { _id } = user;
+        const idString = _id.toString();
         const payload = {
-          username: user.email,
+          userID: idString,
           sub: user.fullname,
         };
        let access_token =  this.jwtService.sign(payload)

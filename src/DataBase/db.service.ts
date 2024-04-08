@@ -3,10 +3,14 @@ import { Db, ObjectId } from 'mongodb';
 import { CreateUserDto } from './db.DTO';
 import { UpdateUserDTO } from 'src/auth/dto/update-user.dto';
 import { UserSignUpDTO } from 'src/auth/dto/user-sign-up.dto';
+import { CreateOrderDTO } from 'src/orders/dto/create-order.dto';
 
 @Injectable()
 export class DbService {
   constructor(@Inject('DATABASE_CONNECTION') private db: Db) {}
+
+  //--------------------------------  Users --------------------------------
+
   async create(body: CreateUserDto): Promise<void> {
     await this.db.collection('users').insertOne(body);
   }
@@ -20,23 +24,24 @@ export class DbService {
     return await this.db.collection('users').find().toArray();
   }
 
-  async findOne(id: string) {
+  async findUserById(id: string) {
     if (!ObjectId.isValid(id)) {
       throw new BadRequestException;
     }
 
     const response = await this.db.collection('users').findOne({
-      _id: new ObjectId(id),
+      _id: new ObjectId(),
     });
 
     if (!response) {
-      throw new NotFoundException;
+      return ({status: 404,data:{}, message:"User not found"});
     }
 
-    return response;
+    return ({status: 200,data:response, message:"User found"});
   }
 
-  async findOneByEmail(userEmail: string) {
+  async findUserByEmail(userEmail: string) {
+    console.log("useee",userEmail);
     const response = await this.db.collection('users').findOne({
       email: userEmail
     });
@@ -74,5 +79,36 @@ export class DbService {
     if (response.deletedCount === 0) {
       throw new NotFoundException;
     }
+  }
+
+  //--------------------------------  Orders --------------------------------
+
+  async findById(id: ObjectId): Promise<void> {
+    if (!ObjectId.isValid(id)) {
+      throw new BadRequestException;
+    }
+    const response = await this.db.collection('oders').findOne({
+      _id: new ObjectId(id),
+    });
+  }
+
+  async addOrder(order:CreateOrderDTO){
+    return await this.db.collection('oders').insertOne(order); // this will return the object ID of mongodb
+  }
+
+  async updateOrder(){
+    
+  }
+  async allCanceledOdrders(){
+    return await this.db.collection('oders').find({isDeleted:true}).toArray();
+  }
+  async getAllOrder(userId:string){
+    let responce =  await this.db.collection('oders').find({
+      userID : userId
+    }).toArray();
+    if(!responce.length){
+      return ({status: 404,data:{}, message:"Orders not found"});
+    }
+    return ({status: 200,data:responce, message:"Orders found"});
   }
 }

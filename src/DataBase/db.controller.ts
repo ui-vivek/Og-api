@@ -14,7 +14,7 @@ export class DbController {
 
     @Get('get/:id')
     findUSer(@Param('id') id: string, @Headers('') headers: any){  //TODO: check auth 
-        return this.dbService.findOne(id)
+        return this.dbService.findUserById(id)
     }
     
 }

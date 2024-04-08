@@ -13,7 +13,7 @@ export class JwtAuthGuard implements CanActivate {
       const payload = await this.jwtService.verify(token);
       // Additional user validation (optional)
       // e.g., check the database if the user with payload.sub (userId) exists and is active 
-      const user = await this.userService.findById(payload.sub); 
+      const user = await this.userService.findUserById(payload.userID); 
       if (!user) {
         throw new UnauthorizedException('User not found or inactive');
       }
