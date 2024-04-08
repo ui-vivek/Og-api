@@ -41,16 +41,16 @@ export class DbService {
   }
 
   async findUserByEmail(userEmail: string) {
-    console.log("useee",userEmail);
-    const response = await this.db.collection('users').findOne({
+    const user =  await this.db.collection('users').findOne({
       email: userEmail
     });
-    if (!response) {
+    if(!user) {
       return ({status: 404,data:{}, message:"User not found"});
     }
-    return ({status: 200,data:response, message:"User found"});
+    return ({status: 200,data:user, message:"User found"});
+    
   }
-  async update(id: string, body: UpdateUserDTO): Promise<void> { //UpdateUserDto is missing
+  async updateUserById(id: string, body: UpdateUserDTO): Promise<void> { //UpdateUserDto is missing
     if (!ObjectId.isValid(id)) {
       throw new BadRequestException;
     }
@@ -66,7 +66,23 @@ export class DbService {
       },
     );
   }
-
+  async updateUserByEmail(email: string, body: UpdateUserDTO) {
+    let updatedUser = await this.db.collection('users').updateOne(
+      {
+        email: email,
+      },
+      {
+        $set: {
+          ...body,
+          updatedOn: Date.now(),
+        },
+      },
+    );
+    if (!updatedUser.acknowledged) {
+      return ({status: 404,data:{}, message:"User not found"});
+    }
+    return ({status: 200,data:{}, message:"User updated"});
+  }
   async delete(id: string): Promise<void> {
     if (!ObjectId.isValid(id)) {
       throw new BadRequestException;

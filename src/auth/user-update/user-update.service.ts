@@ -1,16 +1,30 @@
 import { Injectable } from "@nestjs/common";
 import { UpdateUserDTO } from "../dto/update-user.dto";
+import { DbService } from "src/DataBase/db.service";
 
 @Injectable()
 export class UserUpdateService{
-    updateUser(user:UpdateUserDTO , id:number){
-        //TODO: check
-        //find the user from db
-        //let user = this.db. findUser
-        if(!user){
+    constructor (private _dbService: DbService){}
+    async updateUser(UserDetails:any){
+        if(!UserDetails.email){
             return ({status:201,data:null,message:"User not found"})
         }
-        //write logic to update the user in db
-        return ({status:200,data:{},message:"User updated"})
+        try {
+            const userRes = await this._dbService.findUserByEmail(UserDetails.email);
+            if(userRes.status != 200){
+                return ({status:404,data:{},message:"User not found"})
+            }
+            return await this._dbService.updateUserByEmail(UserDetails.email,UserDetails).then((updatedUser)=>{
+                if(updatedUser.status == 200){
+                    return ({status:200,data:{},message:"User updated"})
+                }
+            }).catch((error)=>{
+                return ({status:404,data:error,message:"Somthing Went Wrong"})
+            })
+            
+        } catch (error) {
+            return ({status:404,data:error,message:"Somthing Went Wrong"})
+        }
+        
     }
 }

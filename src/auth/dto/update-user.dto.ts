@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Length,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -20,9 +21,8 @@ export class UpdateUserDTO {
   @IsNumber()
   mobile: number;
 
-  @IsNumber()
-  @MaxLength(6)
-  @MinLength(6)
+  @IsString()
+  @Length(6, 6)
   pincode: number;
 
   @IsString()
