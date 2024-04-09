@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from "@nestjs/common";
+import { Body, Controller, Param, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserUpdateService } from "./user-update.service";
 import { UpdateUserDTO } from "../dto/update-user.dto";
 
@@ -6,6 +6,7 @@ import { UpdateUserDTO } from "../dto/update-user.dto";
 export class UpdateUserController{
     constructor(private _userUpadet:UserUpdateService){}
     @Post()
+    @UsePipes(new ValidationPipe({ transform: true, whitelist: true}))
     async updateuser(@Body() user:UpdateUserDTO){
         if(!user){
             return ({status:404,data:{},mesage:"User not found"}); 
