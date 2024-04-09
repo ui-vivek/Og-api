@@ -17,6 +17,11 @@ export class UpdateUserDTO {
   @IsNotEmpty()
   gender: string;
 
+  @IsEmail()
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
   @IsNotEmpty()
   @IsNumber()
   mobile: number;

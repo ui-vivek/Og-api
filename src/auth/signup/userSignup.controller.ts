@@ -17,6 +17,7 @@ export class UsersSignUpController {
   @Post('signup')
   @UsePipes(new ValidationPipe())
   async signup(@Body() user: UserSignUpDTO, @Res() res: Response) {
+    console.log("signup data",user)
     let response = await this._userSignUpService.signup(user);
     if (response.data.accessToken) {
       res.header('Access-Token', response.data.accessToken);
