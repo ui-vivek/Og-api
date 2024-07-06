@@ -97,6 +97,25 @@ export class DbService {
     }
   }
 
+  async findUserInForgotPassword(email:string){
+    let user = await this.db.collection('forgotPassword').findOne({email:email});
+    if(!user){
+      return ({status: 404,data:{}, message:"User not found"});
+    }
+    return ({status: 200,data:user, message:"User found"});
+  }
+
+  async deleteUserInForgotPassword(email:string){
+    let user = await this.db.collection('forgotPassword').deleteOne({email:email});
+    if(!user){
+      return ({status: 404,data:{}, message:"User not found"});
+    }
+    return ({status: 200,data:user, message:"User found"});
+  }
+
+  async createForgotPassword(data:any){
+    return await this.db.collection('forgotPassword').insertOne(data); // this will return the object ID of mongodb
+  }
   //--------------------------------  Orders --------------------------------
 
   async findById(id: ObjectId): Promise<void> {

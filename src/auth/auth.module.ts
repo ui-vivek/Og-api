@@ -1,8 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UserSignInService } from './signin/userSignin.service';
-import { UserSignUpService } from './signup/userSignup.service';
-import { UserSignInController } from './signin/userSignin.controller';
-import { UsersSignUpController } from './signup/userSignup.controller';
 import { UserUpdateService } from './user-update/user-update.service';
 import { UpdateUserController } from './user-update/user-update.controller';
 import { UserModule } from 'src/user/user.module';
@@ -18,8 +14,8 @@ const JWT_SECRET =  process.env.JWT_SECRET
     secret: JWT_SECRET,
     signOptions: { expiresIn: '60m' },
   }),],
-  controllers: [UserSignInController,UsersSignUpController,UpdateUserController],
-  providers: [UserSignInService,UserSignUpService,UserUpdateService,],
+  controllers: [UpdateUserController],
+  providers: [UserUpdateService,],
   exports:[]
 })
 export class AuthModule {}
